@@ -1,3 +1,5 @@
+# credit for this code: https://github.com/LenaNevel/CAPSTONE/blob/master/00_getting_slugs.ipynb
+
 import requests
 from requests import get
 from bs4 import BeautifulSoup
@@ -28,28 +30,27 @@ categories = ['moisturizing-cream-oils-mists',
               'sunscreen-sun-protection',
               'lip-treatments']
 
-# creates a function that gets the browser to scroll down
 
-
+# creates a function that gets the browser to scroll all down
 def scroll_down(driver, number_of_scrolls):
     body = driver.find_element_by_tag_name('body')
+
     while number_of_scrolls >= 0:
         body.send_keys(Keys.PAGE_DOWN)
         number_of_scrolls -= 1
+
     return driver
 
 
-# create an empty data frame that all the URLs and categories will go in to
-final_df = pd.DataFrame(columns=['category', 'URL'])
+# create an empty dataframe to store all product links by category
+dataframe = pd.DataFrame(columns=['category', 'URL'])
 
 
-def get_product_links(category):
-    global final_df
+def get_product_links(driver, category):
+    global dataframe
     page_number = 1
 
     while True:
-        # when running the following .get request in order for everything to work properly
-        # the window needs to be popped open on the screen
         url = 'https://www.sephora.com/shop/' + category + \
             '?pageSize=300&currentPage=' + str(page_number)
         driver.get(url)
@@ -102,13 +103,3 @@ def get_product_links(category):
 
 
 driver.close()
-# driver.get(product_link)
-# number_of_products = int(re.findall("\d+", driver.find_elements_by_class_name(
-#     'css-fgy0ne')[1].find_elements(By.TAG_NAME, "span")[0].text)[0])
-# number_of_products_returned = driver.find_element_by_class_name(
-#     'css-ix8km1')
-# print(number_of_products)
-
-
-# get_products(
-#     'https://www.sephora.com/shop/moisturizing-cream-oils-mists?pageSize=300')
